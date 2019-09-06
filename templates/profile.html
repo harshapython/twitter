@@ -1,0 +1,293 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block title %}Home{% endblock %}
+{% block content %}
+<!-- dispalys profile picture and header image -->
+<div id="backround">
+{% for i in pic %}
+  <a href="#"><img src="/{{i.profile_image}}" onerror="this.src='../../static/img/default.jpg';" class="img-circle" id="img" width="200px" height="200px" style="margin-top:150px; margin-left:70px;border: 5px solid white; z-index: 1;position:absolute;"></a>
+ {% endfor %}  
+{% for i in pic %}
+  <img src="/{{i.header_image}}" onerror="this.src='../../static/img/background.jpg';"   style="height: 250px; width:100%">
+{% endfor %}    
+</div>
+
+<nav class="navbar navbar-default ">
+  <div class="container-fluid">
+    <ul class="nav navbar-nav" style="margin-left:350px;">
+      <li><a href="{% url 'following_page' pk=profile.pk %}"><b>Following</b></a>&emsp;&emsp;&emsp;<b style="color:#3399ff; font-size: 20px;">{{following}}</b></li>      
+      <li><a href="{% url 'followers_page' pk=profile.pk %}"><b>Followers</b></a>&emsp;&emsp;&emsp;<b style="color:#3399ff; font-size: 20px;">{{followers}}</b></li>
+      <li><a href="#"><b>Tweets</b></a>&emsp;&emsp;<b style="color:#3399ff;
+      font-size:20px;">{{twtcount}}</b></li>
+      <li><a href="#"><b>Moments</b></a>&emsp;&emsp; <b style="color:#3399ff; font-size:20px;">0</b></li>
+    </ul>
+    <ul class="nav navbar-nav navbar-right">
+      <li><a href="#"><button type="button" class="btn btn-default" data-pk={{profile.pk}} data-status="follow"  id="follow_btn"><b>Follow</b></button></a></li>   
+      <li><a href="#"><button type="button" class="btn btn-default" data-pk={{profile.pk}} data-status="unfollow" id="unfollow_btn"><b>UnFollow</b></button></a></li>
+      <li><button type="button"  id="editprofile" class="btn btn-info" data-toggle="modal" data-target="#myModal">Edit Profile</button></li>
+    </ul>   
+  {% for i in status %}
+   <p id="status" >{{i.pk}}</p>  
+  {% endfor %}
+   <p id="status1" >{{status}}</p>
+  </div>
+</nav><br><br>
+
+<body style="background-color:#d1e0e0; ">
+<h2 style="color:black; margin-left: 20px;"><a href="#" style="text-decoration: none;">{{profile.username}}</a></h2>
+<p style="margin-left: 20px;"><a href="#" style="text-decoration: none;"><b>{{profile.email}}</b></a></p>
+{% for i,j,k in twtlist %}
+        <div class="container" id="twtid" style="background:#fff;border-radius:9px;box-shadow:12px 12px 15px -12px #000; padding:0px 0 0; margin-bottom:-56px; width: 600px;height:auto;margin-top: 65px;">
+
+        
+          <div class="post" style="height: auto;width: auto;">
+            {% for i in pic %}
+              <a href="#"><img src="/{{i.profile_image}}" class="img-circle" onerror="this.src='../../static/img/default.jpg';"width="40px" height="40px" style="margin-top:10px; margin-left:10px"></a>
+            {% endfor %}
+            <a href="{% url 'profile' pk=i.user.pk %}" style="margin-top:30px;"><b style="color:#3399ff; font-size:17px; margin-left:20px;">{{i.user}}</b></a><br><br>
+            <!-- <p>{{i.email}}</p> -->
+            <p style="margin-left: 20px;">{{i.text|linebreaksbr}}</p>
+            
+            <div id="spa">
+              
+              <img id="twtimg" class="img-responsive" onError="this.onerror=null;this.src='';" src="/{{i.profile_image }}" / style="margin-left: 20px; width: 80%;">
+              
+            
+            </div> <br> 
+
+              <a href="{% url 'comments' pk=i.pk %}">{{ i.comments.count }}</a>
+            <p type="button" class="fa fa-comments fa-lg" style="color: #3399ff;margin-left:20px;" title="comments"></p><a href="#" data-toggle="tooltip" title="retweet"><i class="fas fa-retweet" style="color: #3399ff;margin-left:50px; font-size: 20px;"></i></a><a href="#" data-toggle="tooltip" title="likes"><i class="fas fa-heart" style="margin-left: 80px;color: #3399ff;font-size: 20px;"></i></a><i class="far fa-envelope" style="margin-left:90px; color:#3399ff;font-size:20px;"></i>
+            <i style="margin-left: 80px;color: #3399ff;font-size: 15px;"></i><button class="btn btn-info" onclick="ch('{{i.pk}}')">comments</button>
+          
+            <p style="margin-left: 20px;">posted on:{{i.created_at}}</p><br>
+<div id="comments_hide{{i.pk}}" style="display: none;">         
+{% for i in j %}
+        <!-- <div class="container" id="twtid" style="background:#fff;border-radius:9px;box-shadow:12px 12px 15px -12px #000; padding:0px 0 0; margin-bottom:-56px; width: 500px;height:auto;margin-top: 65px;"> -->
+        
+          <div class="post" style="height: auto;width: auto;">
+            
+            <i style="margin-top:30px;"><b style="color:#3399ff; font-size:17px; margin-left:20px;">{{i.user}}</b></i><br><br>
+            <!-- <p>{{i.email}}</p> -->
+            <p style="margin-left: 20px;">{{i.text|linebreaksbr}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
+            <a href="{% url 'replycomments' pk=i.pk %}">{{ i.replycomments.count }}</a>
+            <p type="button" class="fa fa-comments fa-lg" data-toggle="modal" data-form="{% url 'replysavecomment1' pk=i.pk }" data-pk1="{{i.pk}}" data-target="#myModal1" data-user1="{{i.user}}" data-text1="{{i.text|linebreaksbr}}" id="modalbutton1" style="color: #3399ff;margin-left:20px;" title="comments"></p>
+      <i style="margin-left: 80px;color: #3399ff;font-size: 15px;"><a href="{% url 'replycomments' pk=i.pk %}">{{ count }}Comments: </a></i>      
+
+            
+            <div id="spa">
+              
+              <img id="twtimg" class="img-responsive" onError="this.onerror=null;this.src='';" src="/{{i.image }}" />
+              
+            
+            </div>  
+        
+            
+            <p style="margin-left: 20px;">posted on:{{i.created_at}}</p><br><br>
+            
+            
+            
+          </div>
+        
+
+{% empty %}
+<div class="container" id="twtid" style="background:#fff;border-radius:9px;box-shadow:12px 12px 15px -12px #000; padding:0px 0 0; margin-bottom:-56px; width:auto;height:auto;margin-top: 65px;">
+        
+  <div class="post" style="height:10px;width: 500px;">
+            
+   
+
+</div>
+  
+</div>
+      {% endfor %}</div>
+
+
+          </div>
+        </div>
+
+
+
+      {% endfor %}
+
+        <div class="modal fade" id="myModal" role="dialog" style="height: 700px; width: 100%;">
+    <div class="modal-dialog" style="height:500px;width: 100%; margin-top: 100px;">      
+      <div class="modal-content">         
+        <div class="modal-header"><button type="button" class="close" data-dismiss="modal">&times;<span style="color: red;"></span></button>
+          {% for i in pic %} 
+          <img class="img-responsive"  src="/{{i.header_image}}"  style="width: 100%; height:250px;">
+          {% endfor %}
+        </div>        
+        <div class="modal-body" style="padding:40px 50px;">
+        <button type="submit" class="btn btn-default pull-right" data-dismiss="modal" style="border-radius: 15px; margin-left: 1100px;">Cancel</button>          
+          <form role="form" action="{%url 'updateprofile' %}" method="post" enctype="multipart/form-data">            
+              {% csrf_token %}
+              <h2><b>{{user.username}}</b></h2> 
+              {{ form.as_p }}
+              <button type="submit" class="btn btn-default pull-right" style="border-radius:20px;border-color: #0080ff; color: #0080ff; margin-bottom:50px;"><b>Save changes</b></button>
+            </form>              
+        </div>      
+      </div>      
+    </div>
+  </div> 
+  
+<script type="text/javascript">
+          $(modalbutton1).click(function() {
+            var pk = $(this).data("pk1");
+            var text = $(this).data("text1");
+            var user=$(this).data("user1");
+            var url = "{% url 'replysavecomment1' pk=0 %}";
+
+            url = url.replace(0,pk);
+
+              $("#form2").attr("action", url);
+              $("#newuser").html(user);
+              $("#user2").html("<b>"+user+":</b>");
+              $("#text2").html(text+"<hr>");
+              console.log(pk);
+              console.log(text);
+              console.log(user);
+              
+          });
+          </script>
+
+<div id="myModal1" class="modal fade " role="dialog" style="height: 700px; width: 100%;">
+  <div class="modal-dialog">
+
+      <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title" id="newuser">Reply To </h4>
+          </div>
+          <div class="modal-body">
+            <p id="user2"></p>
+            <p id="text2"></p>
+            <form role="form" method="post" class="tweet-form" enctype="multipart/form-data" id="form2"> 
+              {% csrf_token %}
+                {{ form2.as_p }}
+                <i class="fa fa-camera" onclick="chooseFile()" style="margin-left:30px;margin-top: 35px;" id="camera"  data-toggle="tooltip" data-placement="top" title="Add photos"" ></i>
+                <input type="file" id="choose" >
+         
+          <button class="btn btn-default btn-md" type="submit" style="width:70px;margin-bottom:20px;background-color:#3a85ff;color:white; margin-left:350px; ">Reply</button>
+            </form>
+          </div>
+      </div>
+    </div>
+</div>  
+<!-- backend validations for follow and unfollow button -->
+<script type="text/javascript">
+          $(follow_btn).click(function() {
+            var value =$(this).data("status");
+            var pk = $(this).data("pk");
+            var url1="{% url 'profile' pk=1 %}"
+            url1 = url1.replace(1,pk);
+            console.log(pk);
+            console.log(value);
+        $.ajax({
+          url: url1, 
+          data:{
+            'action':value,
+            'id': pk
+          },
+          success: function(data){ 
+            data1=data.data1;
+            console.log(data)
+          $("#follow_btn").hide();
+          $("#unfollow_btn").show();
+          $("#editprofile").hide();
+       
+        }
+    });
+});
+        $(unfollow_btn).click(function() {
+            var value =$(this).data("status");
+            var pk = $(this).data("pk");
+            var url1="{% url 'profile' pk=1 %}"
+            url1 = url1.replace(1,pk);
+            console.log(pk);
+            console.log(value);
+        $.ajax({
+          url: url1, 
+          data:{
+            'action':value,
+            'id': pk
+          },
+          success: function(data){ 
+            data1=data.data1;
+            console.log(data)
+            $("#follow_btn").show();
+            $("#unfollow_btn").hide();
+            $("#editprofile").hide();
+        
+        }
+    });
+    }); 
+        // validations for frontend to hide/show the follow and unfollow button
+          $(document).ready(function(){
+          $("#status").hide();
+          $("#status1").hide();
+          var value =$("#status").text();
+          var value2 =$("#status1").text();
+          console.log(value2);
+          console.log((Number(value))==0); 
+          if(value2=="ok")
+          {
+             $("#follow_btn").hide();
+              $("#unfollow_btn").hide();
+          }
+         else if((Number(value))==0)
+          {
+            $("#follow_btn").show();
+             $("#unfollow_btn").hide();
+             $("#editprofile").hide();
+          }
+          else if(!(Number(value))==0) {
+            
+             $("#unfollow_btn").show();
+             $("#follow_btn").hide();
+                $("#editprofile").hide();
+          }
+        
+          });
+</script>
+<!-- validations for comments to toggle -->
+<script type="text/javascript">
+$(document).ready(function(){
+    $("#id_image").hide();
+    });
+   function chooseFile() {
+      document.getElementById("id_image").click();
+   }
+          $("#modalbutton1").click(function() {
+            var pk = $(this).data("pk");
+            var text = $(this).data("text");
+            var user=$(this).data("user");
+            var url = "{% url 'savecomment' pk=0 %}";
+            url = url.replace(0,pk);
+              $("#form1").attr("action", url);
+              $("#user").append(user);
+              $("#user1").append("<b>"+user+":</b>");
+              $("#text").append(text+"<hr>");
+              console.log(pk);
+          });
+      
+</script>
+<!-- styles -->
+<style type="text/css">
+  label:first-child{
+    display: none;
+  }
+  .errorlist{
+    display: none;
+  }
+  #id_text{
+    margin-left:10px;
+    margin-top:20px;
+    width: 90%; 
+    height:50px;
+    border-radius: 10px;
+
+  }
+</style>
+{% endblock %}
+
+

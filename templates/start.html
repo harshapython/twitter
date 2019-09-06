@@ -1,0 +1,88 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Bootstrap Example</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <link rel="stylesheet" href="{% static 'css/twtstyles.css' %}">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+<style type="text/css">
+.signup{
+	border-radius: 100px;
+    box-shadow: none;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+    line-height: 20px;
+    padding: 6px 16px;
+    position: relative;
+    text-align: center;
+    white-space: nowrap;
+    width:50%;
+
+}
+html,body
+{
+height:95%;
+}
+
+
+/*.footer
+{
+position: relative;
+ 
+height:50px;
+clear:both;
+padding-top:20px;
+color:#fff;
+}
+*/
+</style>  
+</head>
+<body style="height:100%">
+<div class="container-fluid">
+	<div class="row">
+
+		<div class="col-sm-6" id="pic">
+		<div style="padding: 300px 50px 195px 100px;">
+		<span class="glyphicon glyphicon-search" style="word-spacing: -10px;">&nbsp;		Follow our interests</span><br><br>
+		<span class="glyphicon glyphicon-user" style="word-spacing: -10px;">&nbsp;		Hear what people are talking about</span><br><br>
+		<span class="glyphicon glyphicon-comment" style="word-spacing: -10px;">&nbsp;		Join the conversation</span>
+		</div>
+		</div>
+		<div class="col-sm-6"><div style="margin-left:60px;">
+		<img class="img" src="{% static "css/images/download.png" %}" style="width: 70px;height: 70px; margin-top: 250px;">
+		<h3 style="font-size: 22px;"><b>See what's happening in the world right now </b></h3><br>
+		<p style="font-size: 22px;"><b>Join twitter today</b></p><br><br>
+		<div>
+		<button type="button" class="btn btn-primary btn-md signup" onclick="location.href='signup'">Sign Up</button></div><div><br>
+		<button type="button" class="btn btn-default btn-md signup" style="border-color: #0099ff" onclick="location.href='login'"><b style="color:#0099ff ">Log in</b></button></div> </div> 	
+		</div>
+	</div>
+</div>
+
+	<div class="footer footer navbar-fixed-bottom" id="main">
+	<p style="text-align: center ">
+	<a href="#" style="color:#7c8790">About</a>&nbsp;&nbsp;
+	<a href="#" style="color:#7c8790">HelpCenter</a>&nbsp;&nbsp;
+	<a href="#" style="color:#7c8790">Blog</a>&nbsp;&nbsp;
+	<a href="#" style="color:#7c8790">Blog</a>&nbsp;&nbsp;
+	<a href="#" style="color:#7c8790">Status</a>&nbsp;&nbsp;
+	<a href="#" style="color:#7c8790">Jobs</a>&nbsp;&nbsp;
+	<a href="#" style="color:#7c8790">Terms</a>&nbsp;&nbsp;
+	<a href="#" style="color:#7c8790">Brand</a>&nbsp;&nbsp;
+	<a href="#" style="color:#7c8790">Apps</a>&nbsp;&nbsp;
+	<a href="#" style="color:#7c8790">Advertise</a>&nbsp;&nbsp;
+	<a href="#" style="color:#7c8790">Marketing</a>&nbsp;&nbsp;
+	<a href="#" style="color:#7c8790">Businesses</a>&nbsp;&nbsp; &copy 2018 Twitter</p>	
+	</div>	
+	
+</body>
+</html>
+
+

@@ -1,0 +1,266 @@
+{% extends 'base.html' %}
+{% block title %}Login{% endblock %}
+{% block stylesheets %}
+<link rel="stylesheet" href="https://abs.twimg.com/a/1541103114/css/t1/twitter_core.bundle.css" class="coreCSSBundles">
+<link rel="stylesheet" class="moreCSSBundles" href="https://abs.twimg.com/a/1541103114/css/t1/twitter_more_1.bundle.css">
+<link rel="stylesheet" class="moreCSSBundles" href="https://abs.twimg.com/a/1541103114/css/t1/twitter_more_2.bundle.css">
+<link rel="dns-prefetch" href="https://pbs.twimg.com">
+<link rel="dns-prefetch" href="https://t.co">
+<link rel="preload" href="https://abs.twimg.com/k/en/init.en.3ed38089cf03448b4149.js" as="script">
+<link rel="preload" href="https://abs.twimg.com/k/en/0.commons.en.d4794bee8ef7a28c3406.js" as="script">  
+<link rel="mask-icon" sizes="any" href="https://abs.twimg.com/a/1541103114/icons/favicon.svg" color="#1da1f2">
+<link rel="shortcut icon" href="//abs.twimg.com/favicons/favicon.ico" type="image/x-icon">
+<link rel="apple-touch-icon" href="https://abs.twimg.com/icons/apple-touch-icon-192x192.png" sizes="192x192">
+<link rel="canonical" href="https://twitter.com/login">
+<link rel="alternate" hreflang="x-default" href="https://twitter.com/login?prefetchTimestamp=1541411189145">
+<link rel="alternate" media="handheld, only screen and (max-width: 640px)" href="https://mobile.twitter.com/session/new">
+<link rel="alternate" href="android-app://com.twitter.android/twitter/login?ref_src=twsrc%5Egoogle%7Ctwcamp%5Eandroidseo%7Ctwgr%5Elogin">
+<link rel="search" type="application/opensearchdescription+xml" href="/opensearch.xml" title="Twitter">
+<link id="async-css-placeholder">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script> 
+{% endblock %}
+{% block content %}
+
+<body class="three-col logged-out ms-windows" 
+data-fouc-class-names="swift-loading no-nav-banners"
+dir="ltr">
+<div id="doc" data-at-shortcutkeys="{&quot;Enter&quot;:&quot;Open Tweet details&quot;,&quot;o&quot;:&quot;Expand photo&quot;,&quot;/&quot;:&quot;Search&quot;,&quot;?&quot;:&quot;This menu&quot;,&quot;j&quot;:&quot;Next Tweet&quot;,&quot;k&quot;:&quot;Previous Tweet&quot;,&quot;Space&quot;:&quot;Page down&quot;,&quot;.&quot;:&quot;Load new Tweets&quot;,&quot;gu&quot;:&quot;Go to user\u2026&quot;}" class="route-login login-responsive">
+  <div class="topbar js-topbar">
+    <div class="global-nav global-nav--newLoggedOut" data-section-term="top_nav">
+      <div class="global-nav-inner">
+        <div class="container">
+          <ul class="nav js-global-actions" role="navigation" id="global-actions">
+            <li id="global-nav-home" class="home" data-global-action="home">
+              <a class="js-nav js-tooltip js-dynamic-tooltip" data-placement="bottom" href="/" data-component-context="home_nav" data-nav="home">
+                <span class="Icon Icon--bird Icon--large"></span>
+                <span class="text" aria-hidden="true">Home</span>
+                <span class="u-hiddenVisually a11y-inactive-page-text">Home</span>
+                <span class="u-hiddenVisually a11y-active-page-text">Home, current page.</span>
+              </a>
+            </li>
+            <li id="global-nav-about" class="about" data-global-action="about">
+              <a class="js-tooltip js-dynamic-tooltip" data-placement="bottom" href="{% url 'about' %}" data-component-context="about_nav" data-nav="about" rel="noopener">
+                <span class="text">About</span>
+              </a>
+            </li>
+          </ul>
+      </div>
+    </div>
+  </div>
+</div>
+<div id="page-outer">
+  <div id="page-container" class="AppContent wrapper wrapper-login">
+    <div class="page-canvas">
+
+      <div class="signin-wrapper" data-login-message="" style="max-width:90%;padding-left: 20px;">
+        <h1>Sign Up To Twitter</h1>
+<form method="post" action="{%url 'signup'%}">
+    {% csrf_token %}
+    <div id="inner">
+     {{ form.as_p }}
+    </div>
+    <input type="checkbox" value="0" name="remember_me" onclick="myFunction()">Show Password &nbsp;&nbsp;&nbsp;
+    <button type="submit" class="submit EdgeButton EdgeButton--primary EdgeButtom--medium">Sign up</button>
+    <input onclick="window.location.href='../login'" type="button"class="submit EdgeButton EdgeButton--primary EdgeButtom--medium"value="Login">
+ </div>
+</form>
+      </div>
+
+    </div>
+  </div>
+</div>
+</div>
+</body>
+<!-- checkbox validation(on check the password fields displays the text and on uncheck it displays in encrypted form) -->
+<script>
+function myFunction() {
+    var x = document.getElementById("id_password2");
+    var y = document.getElementById("id_password1");
+    if (x.type && y.type === "password") {
+        x.type = "text";
+        y.type = "text";
+    } else {
+        x.type = "password";
+        y.type = "password";
+    }
+}
+</script>
+
+<!-- validations for username -->
+<!-- onerror the outline of the field is displayed in red color and also the error message is displayed in red color beside it -->
+<!-- the data entered is valid then the outline of the field is in black color -->
+<!-- on blur the error message is displayed -->
+<script type="text/javascript">
+  $(document).ready(function(){
+
+    $("#id_username").before("<span class='star'>*</span> <br>");
+    var err_username = '<span id="err_username" class="errmsg"></span>';
+    $("#id_username").after(err_username);  
+    $("#id_username").blur(function(){
+     
+    var username =$("#id_username").val();
+    if(username==""){
+      $("#id_username").css("border-color", "red");
+      
+      
+      $("#err_username").html("Invalid Username");
+       
+        
+
+        return false;
+      }
+    else{
+        $("#err_username").text("");
+          $("#id_username").css("border-color", "black");
+        return true;
+      }          
+    });
+});
+</script>
+<!-- validations for email -->
+<!-- onerror the outline of the field is displayed in red color and also the error message is displayed in red color beside it -->
+<!-- the data entered is valid then the outline of the field is in black color -->
+<!-- on blur the error message is displayed -->
+<script type="text/javascript">
+  $(document).ready(function(){
+    $("#id_email").before("<span class='star'>*</span><br>");  
+    var err_email = '<span id="err_email" class="errmsg"></span>';
+    $("#id_email").after(err_email);  
+    $("#id_email").blur(function(){  
+    var mail=$("#id_email").val();
+    var mailformat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/g;
+    if(!(mail.match(mailformat))){
+      $("#err_email").html("Invalid email address");
+       $("#id_email").css("border-color", "red");  
+        return false;
+      }
+    else{
+        $("#err_email").text("");
+          $("#id_email").css("border-color", "black");
+        return true;
+      }          
+    });
+}); 
+</script>
+<!-- validations for password -->
+<!-- onerror the outline of the field is displayed in red color and also the error message is displayed in red color beside it -->
+<!-- the data entered is valid then the outline of the field is in black color -->
+<!-- on blur the error message is displayed -->
+<script type="text/javascript">
+  $(document).ready(function(){
+
+
+    $("#id_password1").before("<span class='star'>*</span><br>");
+    var err_password1 = '<span id="err_password1" class="errmsg"></span>';
+    $("#id_password1").after(err_password1);  
+    $("#id_password1").blur(function(){  
+    var psw=$("#id_password1").val();    
+    if(!(psw.length>=8)){            
+      $("#err_password1").html("Password should contain minimum 8 characters");
+       $("#id_password1").css("border-color", "red");  
+        return false;
+      }
+    else{
+        $("#err_password1").text("");
+        $("#id_password1").css("border-color", "black");
+        return true;
+      }          
+    });
+});  
+</script>
+<!-- validations for password confirmation -->
+<!-- onerror the outline of the field is displayed in red color and also the error message is displayed in red color beside it -->
+<!-- the data entered is valid then the outline of the field is in black color -->
+<!-- on blur the error message is displayed -->
+<script type="text/javascript">
+  $(document).ready(function(){
+    $("#id_password2").before("<span class='star'>*</span><br>");  
+    var err_password2 = '<span id="err_password2" class="errmsg"></span>';
+    $("#id_password2").after(err_password2);  
+    $("#id_password2").blur(function(){             
+    var psw=$("#id_password2").val();
+    var con = $("#id_password2").val();    
+    if(psw!=con){           
+      $("#err_password2").html("Password doesn't match!!");
+       $("#id_password2").css("border-color", "red");  
+        return false;
+      }
+    else{
+        $("#err_password2").text("");
+          $("#id_password2").css("border-color", "black");
+        return true;
+      }          
+    });
+});  
+</script>
+<script>
+  $( function() {
+    $( "#id_username" ).attr('autocomplete', 'off');
+      $( "#id_email" ).attr('autocomplete', 'off');
+  } );
+  </script>
+<!-- styles  -->
+<style type="text/css">
+  p{
+    margin-bottom: 25px;
+  }
+  #err_email{
+    margin-left: 10px;
+  }
+ #inner ul:first-child{
+  
+    color:red;
+  }
+  #inner ul:nth-child(2){
+   
+    color:red;
+  }
+  #inner ul:nth-child(3){
+    
+    color:red;
+  }#inner ul:nth-child(4){
+    display: none;
+    color:black;
+  }
+  #inner ul:nth-child(5){
+  color:red;
+  }
+  #inner p:nth-child(2) span:last-child{
+    display: none;
+  }
+  #inner p label{
+    font-size: 18px;
+    font-style: italic;
+    font-family:-webkit-body;
+  }
+   li{
+
+    font-size: 12px;
+    list-style-type: disc;
+  }
+  .errmsg{
+    color: red;
+  }
+  .helptext{
+    display: none;
+    font-size: 120px;
+  }
+  
+  h1{
+    
+    font-size: 34px;
+}
+  input{
+    width: 279px;
+  }
+  
+  .star{
+    color: red;
+    font-size: 20px;
+    margin-top: 50px;
+  }
+  #inner p:nth-child(2) span:last-child{
+    display: none;
+  }
+</style> 
+{% endblock %}

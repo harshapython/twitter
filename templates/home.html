@@ -1,0 +1,390 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<body style="background-color: #d1e0e0;">	
+<div class="container-fluid" >
+	<div class="row">
+		<div class="col-sm-4">
+			{% for i in pic %}
+		  		<div style="height: 100px;width:300px;margin-top:10px; margin-left: 115px; margin-inline-start:100px ">
+        		<img src="/{{i.header_image}}" onerror="this.src='../static/img/background.jpg';" style="height: 100px;width:300px;margin-top:0px; margin-left: 115px; margin-inline-start:0px ">
+				
+					<a href="#"><img src="/{{i.profile_image}}" onerror="this.src='../static/img/default.jpg';" class="img-circle" width="90px" height="90px" style="margin-top:-40px; margin-left:20px"></a>
+			{% endfor %}
+				<h5><a href="#" style="margin-left:100px;color: black; text-decoration: none;"><b>{% if i.user.profile.profilename %}<i>{{user.profile.profilename}}</i>{% else %}<i>{{i.user.username}}</i>{% endif %}</b> <br>  
+				&emsp;&emsp;&nbsp &emsp;&nbsp &emsp;&emsp;<i><b>{{user.email}}</b></i></a></h5>
+				<div class="row">
+					<div class="col-sm-4">
+						<a href="#" style="text-decoration: none; margin-top: 10px; margin-left:20px; color:#3a85ff; "><b>Tweets</b></a>
+						<h6 style="font-size:18px;">&emsp;&emsp;{{twtcount}}</h6>
+					</div>
+					<div class="col-sm-4">
+						<a href="{% url 'following_page' pk=user.pk %}" style="text-decoration: none;color:#3a85ff"><b>Following</b></a>
+						<h6 style="font-size: 17px;">&emsp;{{following}}</h6>
+					</div>
+					<div class="col-sm-4">
+						<a href="{% url 'followers_page' pk=user.pk %}" style="text-decoration: none;color: #3a85ff"><b>Followers</b></a>
+						<h6 style="font-size: 17px;">&emsp;{{followers}}</h6>
+					</div>
+				</div>
+			</div>
+			<div style="width: 300px;background-color: white; height:160px; margin-left: 115px;  margin-inline-start:100px;border-radius: 5px;">
+			</div><br>
+			<div class="container" id="sta">
+				<h5><b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Trends For You</b></h5>
+				<ul style="list-style-type:none">
+				<b><a href="#">#HAPPY DIWALI</b></a><br>
+				<p>1,253k Tweets</p><br>
+				<b><a href="#">#F2 FirstLook</b></a><br>
+				<p>30k Tweets</p><br>
+				<b><a href="#">#FLIPKART Festive Season</b></a><br>
+				<p>3,040 Tweets</p><br>
+				<b><a href="#">#SARKAR</b></a><br>
+				<p>13.5k Tweets</p><br>
+				<b><a href="#">#ROWDY</b></a><br>
+				<p>4,258 Tweets</p><br>
+				<b><a href="#">#ROFL</b></a><br>
+				<p>12,112 Tweets</p><br>
+				<b><a href="#">#INS Arihant</b></a><br>
+				<p>1M Tweets</p><br>
+				<b><a href="#">#DiwaliKiBhadai</b></a><br>
+				<p>445 Tweets</p><br>
+				<b><a href="#">#Nirvana</b></a><br>
+				<p>1,13,255 Tweets</p><br>
+				</ul>			
+			</div>	
+		</div>
+
+		<div class="col-sm-4">
+			<div style="background-color:#b3ecff;height:90px;width:600px;margin-top:10px;">
+			{% for i in pic %}
+				<img src="/{{i.profile_image}}" class="img-circle" id="hide" onerror="this.src='../static/img/default.jpg';" style="float: left; margin-left:10px; margin-top: 20px;font-size: 25px; width: 30px; height: 30px;"></img>
+			{% endfor %}	
+	    	<form method="POST" class="tweet-form" enctype="multipart/form-data" autocomplete="off">
+	          {% csrf_token %}
+	          {{ form.as_p }}
+				<div class="element" id="show" style="background-color:#b3ecff; height: 90px; width: 600px;display: none; ">
+					<i class="fa fa-camera" style="margin-left:30px;margin-top: 35px;" id="camera"  data-toggle="tooltip" data-placement="top" title="Add photos" onclick="chooseFile1()" ></i>
+  					<i class='fas fa-image' style='margin-left: 40px;margin-top: 30px; font-size:24px'></i><i class='fas fa-poll' style='margin-left: 20px;margin-top: 30px; font-size:24px'></i><i class='fas fa-map-marker-alt' style='margin-left: 20px;margin-top: 30px; font-size:24px'></i><button class="btn btn-default btn-md" type="submit" style="width:70px;background-color:#3a85ff;color:white;margin-left: 300px; margin-top: 30px;">tweet</button>
+				</div>
+			</form>
+
+			{% for i,j,k in twtlist %}
+				<div class="container" id="twtid" style="background:#fff;border-radius:9px;box-shadow:12px 12px 15px -12px #000; padding:0px 0 0; margin-bottom:-56px; width: 600px;height:auto;margin-top: 65px;">
+					<div class="post" style="height: auto;width: auto;">
+						<!-- {% for i in pic %}
+							<a href="#"><img  class="img-circle" onerror="this.src='../static/img/default.jpg';"width="40px" height="40px" style="margin-top:10px; margin-left:10px"></a>
+						{% endfor %} -->
+						<a href="{% url 'profile' pk=i.user.pk %}" style="margin-top:30px;"><b style="color:#3399ff; font-size:18px; margin-left:10px;">{{i.user}}</b></a><br>
+						<br>
+						<p style="margin-left: 20px;">{{i.text|linebreaksbr}}</p>
+						<div id="spa">
+							<img id="twtimg" class="img-responsive" onError="this.onerror=null;this.src='';" src="/{{i.profile_image }}" />
+						</div>	
+
+						<a href="{% url 'comments' pk=i.pk %}">{{ i.comments.count }}</a>
+						<p type="button" class="fa fa-comments fa-lg" data-toggle="modal" data-form="{% url 'savecomment' pk=i.pk }" data-pk="{{i.pk}}" data-target="#myModal" data-user="{{i.user}}" data-text="{{i.text|linebreaksbr}}" id="modalbutton" style="color: #3399ff;margin-left:20px;" title="comments"></p>
+						<a href="#" data-toggle="tooltip" title="retweet"><i class="fas fa-retweet" style="color: #3399ff;margin-left:50px; font-size: 20px;"></i></a>
+						<a href="#" data-toggle="tooltip" title="likes"><i class="fas fa-heart" style="margin-left: 80px;color: #3399ff;font-size: 20px;"></i></a><i class="far fa-envelope" style="margin-left:90px; color:#3399ff;font-size:20px;"></i>
+						<i style="margin-left: 80px;color: #3399ff;font-size: 15px;"></i>
+						<button class="btn btn-info" onclick="ch('{{i.pk}}')">comments</button>
+						<p>posted on:{{i.created_at}}</p><hr>
+						<div id="comments_hide{{i.pk}}" style="display: none;">					
+							{% for i in j %}
+        
+							<div class="post" style="height: auto;width: auto;">
+					            {% for i in pic %}
+					              <a href="#"><img src="/{{i.profile_image}}" onerror="this.src='../static/img/default.jpg';" class="img-circle" width="40px" height="40px" style="margin-top:10px; margin-left:10px"></a>
+					            {% endfor %}
+					            <i style="margin-top:30px;"><b style="color:#3399ff; font-size:17px; margin-left:20px;">{{i.user}}</b></i><br><br>
+
+					            
+
+					            <p style="margin-left: 20px;">{{i.text|linebreaksbr}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
+					            <a href="{% url 'replycomments' pk=i.pk %}">{{ i.replycomments.count }}</a>
+											<p type="button" class="fa fa-comments fa-lg" data-toggle="modal" data-form="{% url 'replysavecomment' pk=i.pk }" data-pk1="{{i.pk}}" data-target="#myModal1" data-user1="{{i.user}}" data-text1="{{i.text|linebreaksbr}}" id="modalbutton1" style="color: #3399ff;margin-left:20px;" title="comments"></p>
+								<i style="margin-left: 80px;color: #3399ff;font-size: 15px;"><a href="{% url 'replycomments' pk=i.pk %}">{{ count }}Comments: </a></i>		
+								<div id="spa">
+            						<img id="twtimg" class="img-responsive" onError="this.onerror=null;this.src='';" src="/{{i.image }}" />
+				            	</div> 
+				            	<p>posted on:{{i.created_at}}</p><hr>
+  							</div>
+        
+
+							{% empty %}
+								<div class="container" id="twtid" style="background:#fff;border-radius:9px;box-shadow:12px 12px 15px -12px #000; padding:0px 0 0; margin-bottom:-56px; width:auto;height:auto;margin-top: 65px;">
+									<div class="post" style="height:10px;width: 500px;"></div>
+								</div>
+							{% endfor %}
+						</div>
+
+
+					</div>
+				</div>
+			{% endfor %}
+
+		</div>
+	</div>
+ 		<div class="col-sm-4"  id="sta" style ="margin-top:18px">
+				<p><h5><b style="width: 30%">Who to follow</b></h5> 
+	{% for j in random_users %}
+	 <img src="/{{j.profile_image}}"  onerror="this.src='../static/img/default.jpg';" class="img-circle" width="50px" height="50px" style="margin-top:10px; margin-left:10px">
+   
+      <span class="account-group-inner" data-user-id="19895282">
+        <a href="{% url 'profile' pk=j.user.pk %}" ><strong class="fullname">{{ j.user }}</strong></a><span class="UserBadges"><span class="Icon Icon--verified">&nbsp;&nbsp;&emsp;&emsp;&emsp;<span class="u-hiddenVisually"></span></span></span><span class="UserNameBreak"></span><p style="margin-left: 60px; margin-top: -20px;">{{j.user.email}}</p>
+        </span>
+    </a><br><br>
+    {% endfor %}
+ 
+</div>	
+</div>
+</div>
+</div>
+<!-- toggle comments -->
+<script>
+$(document).ready(function(){
+    $("#btn_hide").click(function(){
+        $("comments_hide").toggle();
+    });
+});
+</script>
+<script type="text/javascript">
+	$(function(){
+		$("#id_text").attr("placeholder", "What's happening?");
+
+	});
+</script>
+<style type="text/css">
+
+	#sta{
+		display: block;
+		border:1px solid white;
+		width: 300px;
+	    margin-left: 115px;
+	    background-color:white;
+	    margin-inline-start:100px;
+	    margin-top: -10px;
+	   border-radius:20px;
+	   border-color: #1a75ff;
+	   border-width:2px;
+	}
+	#spa{
+		border:0px solid black;
+		width: auto;
+		height: auto;
+		margin-top: 16px;
+		margin-left: 20px;
+		margin-right: 20px;
+		margin-bottom: 20px;
+		border-radius: 8%;
+	}
+
+	label:first-child{
+		display: none;
+	}
+	#id_text{
+		margin-left:10px;
+		margin-top:20px;
+		width: 90%; 
+		height:50px;
+		border-radius: 10px;
+		padding-left: 7px;
+
+	}
+	p{
+		margin:2px 0 0 10px;
+	}
+	#id_profile_image{
+		display: none;
+	}
+
+	.errorlist{
+		display: none;
+	}
+	#twtimg{
+	    padding: 1px;
+	    width: 100%;
+	}
+</style>
+<script type="text/javascript">
+
+function chooseFile1() {
+      document.getElementById("id_profile_image").click();
+   }
+
+$('input[type="file"]').on('change', function() {
+  var val = $(this).val();
+  $(this).siblings('span').text(val);
+})
+
+$(document).ready(function(){
+    $("#hide").click(function(){
+        $("#show").hide();
+    });
+    $("#id_text").click(function(){
+        $("#show").show();
+    });
+});	
+
+$(document).ready(function(){
+    $('[data-toggle="tooltip"]').tooltip();   
+});
+
+</script>
+
+
+
+
+<script type="text/javascript">
+	$(modalbutton).one("click",function() {
+	var pk = $(this).data("pk");
+	var text = $(this).data("text");
+	var user=$(this).data("user");
+	var url = "{% url 'savecomment' pk=0 %}";
+
+	url = url.replace(0,pk);
+
+		$("#form1").attr("action", url);
+		$("#user").html(user);
+		$("#user1").html("<b>"+user+":</b>");
+		$("#text").html(text+"<hr>");
+	console.log(pk);
+	});
+</script>
+
+<div id="myModal" class="modal fade " role="dialog" style="height: 700px; width: 100%;">
+	<div class="modal-dialog">
+
+    	<div class="modal-content">
+      		<div class="modal-header">
+        		<button type="button" class="close" data-dismiss="modal">&times;</button>
+        		<h4 class="modal-title" id="user">Reply To </h4>
+      		</div>
+      		<div class="modal-body">
+     			<p id="user1"></p>
+      			<p id="text"></p>
+        		<form role="form" method="post" class="tweet-form" enctype="multipart/form-data" id="form1"> 
+					{% csrf_token %}
+	          		{{ form1.as_p }}
+	          		<i class="fa fa-camera" onclick="chooseFile()" style="margin-left:30px;margin-top: 35px;" id="camera"  data-toggle="tooltip" data-placement="top" title="Add photos"" ></i>
+	          		<input type="file" id="choose" >
+	    			<button class="btn btn-default btn-md" type="submit" style="width:70px;margin-bottom:20px;background-color:#3a85ff;color:white; margin-left:350px; ">Reply</button>
+        		</form>
+      		</div>
+    	</div>
+	</div>
+</div>
+
+<script type="text/javascript">
+					$(modalbutton1).click(function() {
+	    			var pk = $(this).data("pk1");
+	    			var text = $(this).data("text1");
+	    			var user=$(this).data("user1");
+	    			var url = "{% url 'replysavecomment' pk=0 %}";
+
+	    			url = url.replace(0,pk);
+
+	         		$("#form2").attr("action", url);
+	         		$("#newuser").html(user);
+	         		$("#user2").html("<b>"+user+":</b>");
+	         		$("#text2").html(text+"<hr>");
+	        		console.log(pk);
+	        		console.log(text);
+	        		console.log(user);
+	        		
+					});
+					</script>
+
+<div id="myModal1" class="modal fade " role="dialog" style="height: 700px; width: 100%;">
+  <div class="modal-dialog">
+
+      <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title" id="newuser">Reply To </h4>
+          </div>
+          <div class="modal-body">
+            <p id="user2"></p>
+            <p id="text2"></p>
+            <form role="form" method="post" class="tweet-form" enctype="multipart/form-data" id="form2"> 
+              {% csrf_token %}
+                {{ form2.as_p }}
+                <i class="fa fa-camera" onclick="chooseFile()" style="margin-left:30px;margin-top: 35px;" id="camera"  data-toggle="tooltip" data-placement="top" title="Add photos"" ></i>
+                <input type="file" id="choose" >
+         
+          <button class="btn btn-default btn-md" type="submit" style="width:70px;margin-bottom:20px;background-color:#3a85ff;color:white; margin-left:350px; ">Reply</button>
+            </form>
+          </div>
+      </div>
+    </div>
+</div> 
+
+<script>	
+	$(document).ready(function(){
+		$("#id_image").hide();
+    });
+
+   function chooseFile() {
+      document.getElementById("id_image").click();
+   }
+</script>
+<style type="text/css">
+
+	#sta{
+		display: block;
+		border:1px solid white;
+		width: 300px;
+	    /*margin-left: 115px;*/
+	    background-color:white;
+	    margin-inline-start:100px;
+	    margin-top: -10px;
+	   border-radius:20px;
+	   border-color: #1a75ff;
+	   border-width:2px;
+	}
+	#spa{
+		border:0px solid black;
+		width: auto;
+		height: auto;
+		margin-top: 16px;
+		margin-left: 20px;
+		margin-right: 20px;
+		margin-bottom: 20px;
+		border-radius: 8%;
+	}
+
+	label:first-child{
+		display: none;
+	}
+	#id_text{
+		margin-left:10px;
+		margin-top:20px;
+		width: 90%; 
+		height:50px;
+		border-radius: 10px;
+
+	}
+	p{
+		margin:2px 0 0 10px;
+	}
+	
+	#id_profile_image{
+		display: none;
+	}
+	#id_image{
+		display: none;
+	}
+	
+	
+	#twtimg{
+
+	    padding: 1px;
+	    width: 100%;
+	}
+	.errorlist{
+		display: none;
+	}
+
+
+</style>
+{% endblock %}

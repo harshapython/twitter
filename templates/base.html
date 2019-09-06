@@ -1,0 +1,99 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>{% block title %}Django Auth Tutorial{% endblock %}</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+    {% block stylesheets %}
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{% static 'css/twtstyles.css' %}">
+    <link rel="stylesheet" href="{% static 'js/script1.js' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="http://twitter.github.com/bootstrap/assets/css/docs.css" rel="stylesheet">
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">  
+    <link href="http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css" rel="Stylesheet"></link>
+    <link rel='stylesheet' href='https://use.fontawesome.com/releases/v5.4.2/css/all.css' integrity='sha384-/rXc/GQVaYpyDdyxK+ecHPVYJSN9bmVFBvjA/9eOB+pb3F2w2N6fc5qB9Ew5yIns' crossorigin='anonymous'>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css">   
+    {% endblock %}
+    {% block scripts %}
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js" ></script>
+    <script type="text/javascript" src="https://code.jquery.com/jquery-migrate-3.0.0.min.js"></script>
+
+    {% endblock %}
+</head>
+<body>
+<!-- nav bar is common for all the pages -->
+<!-- it contains home,search,updateprofile and logout -->
+    <nav class="navbar navbar-default">
+        <div class="container-fluid">    
+        <ul class="nav navbar-nav">
+          <li><a href="{% url 'home' %}"><i class="fa fa-fw fa-home" style="font-size:20px"></i><b>Home</b></a></li> 
+          <li><a href="#"><i class=" fas fa-bolt" style="font-size:20px"></i><b>&nbsp Moments</b></a></li>
+          <li><a href="#"><i class="far fa-bell" style="font-size:20px"></i><b>&nbsp Notifications</b></a></li>
+          <li><a href="#"><i class="far fa-envelope" style="font-size:24px"></i><b> &nbspMessages</b></a></li>
+          <li><a href="#"><i class="fab fa-twitter" style="font-size:30px;color:#4286f4; margin-left: 250px;"></i></a></li>
+          <li><form type="get" action="{% url 'search' %}" accept-charset="utf-8">
+        <input type="text" placeholder="Search.." id='search' value='{{search}}' class="searchfield ui-widget" autocomplete='off' name="search" style="margin-top: 15px;margin-left: 100px;border-radius: 5px;height: 33px;"><button type="submit" id="btn" style="float:right;padding: 7px;
+    background: #2196F3;
+    color: white;
+    font-size:8px;
+    margin-top:15px;
+    border: 1px solid grey;
+    border-left: none;cursor: pointer;"><i class="fa fa-search example" style="font-size:17px"></i></button></form></li>
+      <li>
+    <div class="dropdown">
+        {% for i in pic %} 
+    <img src="../../static/img/default.jpg" data-toggle="dropdown" type="button" style="font-size:40px;margin-top: 15px;margin-left:90px;width:45px;height:45px;"aria-haspopup="true" aria-expanded="true"></img>
+    {% endfor %}
+
+    <ul class="dropdown-menu" style="margin-left:100px;">
+      <li><a class="dropdown-item" href="{% url 'updateprofile' %}"><b>{{user.username}}</b><br>{{user.email}}</a>
+      <hr>
+      <li><a class="dropdown-item" href="{% url 'updateprofile' %}">
+        <font face="verdana">Update profile</font></a></li><hr>
+   
+      {% if user.is_authenticated %}
+        <li><a href="{% url 'logout' %}" >Logout</a></li>
+      {% else %}
+        <li><a href="{% url 'login' %}">login</a></li>
+      {% endif %} 
+    </ul>
+  </div>  
+</nav>
+    {% block content %}
+    {% endblock %}
+<!-- validation for comments to toggle -->
+<script>
+    function ch(value){            
+        $("#comments_hide"+value).toggle();
+    }       
+</script>
+<!-- validation for autocomplete -->
+<script type="text/javascript">
+$( function() {
+        $("#search").on('keyup', function(){
+        var value = $(this).val();
+        $.ajax({
+            url: "{% url 'ajax_autocomplete' %}",
+            data: {
+              'search': value 
+            },
+            dataType: 'json',
+            success: function (data) {
+                list = data.list;
+                console.log(list);
+                $("#search").autocomplete({
+                source : list,
+                minLength:1                
+                });       
+            }
+        });        
+    });
+ });
+</script>
+</body>
+</html>

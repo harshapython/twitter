@@ -1,0 +1,145 @@
+def profile(request, pk):
+	try:
+		form =ProfileForm(instance=request.user.profile)
+		profile= get_object_or_404(User, pk=pk)
+		pic=Profile.objects.filter(user=profile.id)
+		twt=Tweets.objects.filter(user=profile.id)
+		followers=Follow.objects.filter(following=profile.id).count()
+		following=Follow.objects.filter(followers=profile.id).count()
+		tweetscount=Tweets.objects.filter(user=profile.id).count()
+		form1 = commentForm(request.POST)
+		if(request.user!= profile):
+			status=Follow.objects.filter(followers=request.user,following=profile)
+		else:
+			status="ok"
+		if request.is_ajax():
+		    user_id = request.GET.get('id')
+		    action = request.GET.get('action')
+		    if action == "follow":
+		        Follow.objects.get_or_create(followers=request.user,following=profile)
+		        return JsonResponse({'status':'ok','data1':'follow'})
+		    elif action == "unfollow":
+		        Follow.objects.filter(followers=request.user,following=profile).delete()
+		        return JsonResponse({'status':'ok','data1':'unfollow'})
+		return render(request,'profile.html',{'profile':profile,'twt1':twt,'pic':pic,'status':status,'form': form,'followers':followers,'following':following,'twtcount':tweetscount,'form1':form1,}) 
+	except:
+		form =ProfileForm()
+		profile= get_object_or_404(User, pk=pk)
+		pic=Profile.objects.filter(user=profile.id)
+		twt=Tweets.objects.filter(user=profile.id)
+		followers=Follow.objects.filter(following=profile.id).count()
+		following=Follow.objects.filter(followers=profile.id).count()
+		tweetscount=Tweets.objects.filter(user=profile.id).count()
+		form1 = commentForm(request.POST)
+		if(request.user!= profile):
+			status=Follow.objects.filter(followers=request.user,following=profile)
+		else:
+			status="ok"
+		if request.is_ajax():
+		    user_id = request.GET.get('id')
+		    action = request.GET.get('action')
+		    if action == "follow":
+		        Follow.objects.get_or_create(followers=request.user,following=profile)
+		        return JsonResponse({'status':'ok','data1':'follow'})
+		    elif action == "unfollow":
+		        Follow.objects.filter(followers=request.user,following=profile).delete()
+		        return JsonResponse({'status':'ok','data1':'unfollow'})
+		return render(request,'profile.html',{'profile':profile,'twt1':twt,'pic':pic,'status':status,'form': form,'followers':followers,'following':following,'twtcount':tweetscount,'form1':form1,}) 
+<!-- <div id="div">
+{% for i,j in mylist %}
+
+    <div class="grid-container" >
+        <div class="grid-item">
+            
+
+        <img class="img-responsive" src="/{{i.header_image}}"  onerror="this.src='../static/img/background.jpg';" style="height: 100px;width:100%;margin-top:0px; margin-left: 115px; margin-inline-start:0px ">
+    
+          <img class="img-responsive" src="/{{i.profile_image}}" onerror="this.src='../static/img/default.jpg';" class="img-circle" width="90px" height="90px" style="margin-top:-40px; margin-left:20px">
+    {% endfor %}
+</div> -->
+ 
+ 
+
+
+
+
+
+<!-- <div id="div">
+{% for i,j in mylist %}
+
+	<div class="grid-container" >
+  		<div class="grid-item">
+  			
+            {% for j in j %}
+                <img src="/{{j.profile_image}}" onerror="this.src='../../static/img/default.jpg';"  class="img-circle" id="img" width="100px" height="100px" style="margin-top:80px; margin-left:7px;border: 3px solid white; z-index: 1;position: absolute;"></a>
+
+                <img src="/{{j.header_image}}" onerror="this.src='../../static/img/background.jpg';" style="height: 130px; width:100%">
+            {% endfor %} 
+            <a href="{% url 'profile' pk=i.following.pk %}" style="font-size: 30px; margin-left: 40px;">{{i.following}}</a>
+            <p style="font-size: 15px; margin-left: 80px;">{{i.following.email}}</p> 
+              		
+        </div>
+  	</div>
+
+</div>
+  -->
+# =======
+# def following_page(request,pk):
+# 	user = get_object_or_404(User, pk=pk)
+# 	following_list = Follow.objects.filter(followers=user)
+# 	piclist=[]
+# 	for i in following_list:
+# 		pic=Profile.objects.filter(user=i.following)
+# 		piclist.append(pic)
+# 	mylist=zip(following_list,piclist)
+# 	return render(request,'following_page.html', {'mylist':mylist})
+
+# def followers_page(request,pk):
+# 	user = get_object_or_404(User, pk=pk)
+# 	followers_list = Follow.objects.filter(following=user)
+# 	piclist=[]
+# 	for i in followers_list:
+# 		pic=Profile.objects.filter(user=i.followers)
+# 		piclist.append(pic)
+# 	mylist=zip(followers_list,piclist)
+# 	return render(request,'followers_page.html', {'mylist':mylist})
+
+
+# def following_page(request,user_id=1):
+# 	following_list = Follow.objects.filter(followers=request.user)
+# 	piclist=[]
+# 	for i in following_list:
+# 		pic=Profile.objects.filter(user=i.following)
+# 		piclist.append(pic)
+# 	mylist=zip(following_list,piclist)
+# 	return render(request,'following_page.html', {'mylist':mylist})
+
+# def followers_page(request,user_id=1):
+# 	followers_list = Follow.objects.filter(following=request.user)
+# 	piclist=[]
+# 	for i in followers_list:
+# 		pic=Profile.objects.filter(user=i.followers)
+# 		piclist.append(pic)
+# 	mylist=zip(followers_list,piclist)
+# 	return render(request,'followers_page.html', {'mylist':mylist})
+
+# def about(request):
+# 	return render(request,'about.html', {})
+# from django.contrib.auth.models import User
+# from django.contrib import messages
+# from django.views.generic.edit import FormView
+# from django.shortcuts import redirect
+
+# from .forms import GenerateRandomUserForm
+# from .tasks import create_random_user_accounts
+
+# class GenerateRandomUserView(FormView):
+#     template_name = 'core/generate_random_users.html'
+#     form_class = GenerateRandomUserForm
+
+#     def form_valid(self, form):
+#         total = form.cleaned_data.get('total')
+#         create_random_user_accounts.delay(total)
+#         messages.success(self.request, 'We are generating your random users! Wait a moment and refresh this page.')
+#         return redirect('users_list')	
+# >>>>>>> c23780c21d620240d733d35107e75dc0d79d052b  		

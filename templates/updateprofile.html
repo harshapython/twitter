@@ -1,0 +1,448 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>{% block title %}Django Auth Tutorial{% endblock %}</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+    {% block stylesheets %}
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{% static 'css/twtstyles.css' %}">
+    <link rel="stylesheet" href="{% static 'js/script1.js' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="http://twitter.github.com/bootstrap/assets/css/docs.css" rel="stylesheet">
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">  
+    <link href="http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css" rel="Stylesheet"></link>
+    <link rel='stylesheet' href='https://use.fontawesome.com/releases/v5.4.2/css/all.css' integrity='sha384-/rXc/GQVaYpyDdyxK+ecHPVYJSN9bmVFBvjA/9eOB+pb3F2w2N6fc5qB9Ew5yIns' crossorigin='anonymous'>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css">
+   
+
+    {% endblock %}
+    {% block scripts %}
+    <script src="//code.jquery.com/jquery-2.1.4.min.js"></script>
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script> -->
+    <script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js" ></script>
+    <script type="text/javascript" src="https://code.jquery.com/jquery-migrate-3.0.0.min.js"></script>
+    <!-- <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script> -->
+    
+    {% endblock %}
+</head>
+<body>
+{% block content %}
+<style type="text/css">
+  label:first-child{
+    
+    float: left;
+
+  }
+</style>
+<script>
+$(document).ready(function(){
+    $("#editbtn").click(function(){
+        $("#myModal").modal();
+    });
+});
+
+$("#img").click(function () {
+  $("input[type='file']").trigger('click');
+});
+
+$('input[type="file"]').on('change', function() {
+  var val = $(this).val();
+  $(this).siblings('span').text(val);
+})
+$("#headimg").click(function () {
+  $("input[type='file']").trigger('click');
+});
+
+$('input[type="file"]').on('change', function() {
+  var val = $(this).val();
+  $(this).siblings('span').text(val);
+})
+
+</script> 
+<script>
+  $( function() {
+    $( "#id_birth_date" ).datepicker();
+     $( "#id_birth_date" ).attr('autocomplete', 'off');
+     $( "#id_user" ).attr('autocomplete', 'off');
+     $("#id_birth_date").attr("placeholder", "Birthday");
+     $("#id_location").attr("placeholder", "location");
+     $("#id_bio").attr("placeholder", "Bio");
+     $("#id_profilename").attr("placeholder", "Profilename");
+
+     
+     
+     
+
+  } );
+</script>
+
+
+<nav class="navbar navbar-default">
+  <div class="container-fluid">
+    
+    <ul class="nav navbar-nav">
+      <li><a href="{% url 'home' %}"><i class="fa fa-fw fa-home" style="font-size:20px"></i><b>Home</b></a></li> 
+      <li><a href="#"><i class=" fas fa-bolt" style="font-size:20px"></i><b>&nbsp Moments</b></a></li>
+      <li><a href="#"><i class="far fa-bell" style="font-size:20px"></i><b>&nbsp Notifications</b></a></li>
+      <li><a href="#"><i class="far fa-envelope" style="font-size:24px"></i><b> &nbspMessages</b></a></li>
+      <li><a href="#"><i class="fab fa-twitter" style="font-size:30px;color:#4286f4; margin-left: 250px;"></i></a></li>
+      <li><form type="get" action="{% url 'search' %}" accept-charset="utf-8">
+        <input type="text" placeholder="Search.." id='search' value='{{search}}' class="searchfield ui-widget" autocomplete='off' name="search" style="margin-top: 15px;margin-left: 100px;border-radius: 5px;height: 33px;"><button type="submit" id="btn" style="float:right;padding: 7px;
+    background: #2196F3;
+    color: white;
+    font-size:8px;
+    margin-top:15px;
+    border: 1px solid grey;
+    border-left: none;cursor: pointer;"><i class="fa fa-search example" style="font-size:17px"></i></button></form></li>
+      <li>
+    <div class="dropdown">
+        {% for i in pic %} 
+    <img src="/{{i.profile_image}}" class="img-circle" onerror="this.src='../../static/img/default.jpg';" data-toggle="dropdown" type="button" style="font-size:40px;margin-top: 15px;margin-left:90px;width:45px;height:45px;"aria-haspopup="true" aria-expanded="true"></img>
+    {% endfor %}
+
+    <ul class="dropdown-menu" style="margin-left:100px;">
+      <li><a class="dropdown-item" href="{% url 'updateprofile' %}">
+        <b>{% if user.profile.profilename %}
+            <p>{{user.profile.profilename}}</p>
+            {% else %}
+              <p>{{user.username}}</p>
+            {% endif %}</b><br>{{user.email}}</a>
+      <li class="divider"></li>
+      <li><a class="dropdown-item" href="{% url 'updateprofile' %}">
+        <font face="verdana">updateprofile</font></a></li>
+      <li class="divider"></li>
+      {% if user.is_authenticated %}
+        <li><a href="{% url 'logout' %}" >Logout</a></li>
+      {% else %}
+        <li><a href="{% url 'login' %}">login</a></li>
+      {% endif %} 
+    </ul>
+  </div>  
+</nav>
+<div id="backround">
+{% for i in pic %}
+  <a href="#"><img src="/{{i.profile_image}}" onerror="this.src='../static/img/default.jpg';"  class="img-circle" id="img" width="200px" height="200px" style="margin-top:150px; margin-left:70px;border: 5px solid white; z-index: 1;position:absolute;"></a>
+ {% endfor %}  
+{% for i in pic %}
+  <img src="/{{i.header_image}}" onerror="this.src='../static/img/background.jpg';"  style="height: 250px; width:100%">
+{% endfor %}  
+
+  
+</div>
+
+<nav class="navbar navbar-default ">
+  <div class="container-fluid">
+     
+     <ul class="nav navbar-nav" style="margin-left:350px;">
+      <li><a href="{% url 'following_page' pk=user.pk %}"><b>Following</b></a>&emsp;&emsp;&emsp;<b style="color:#3399ff; font-size: 20px;">{{following}}</b></li>
+
+      
+      <li><a href="{% url 'followers_page' pk=user.pk %}"><b>Followers</b></a>&emsp;&emsp;&emsp;<b style="color:#3399ff; font-size: 20px;">{{followers}}</b></li>
+      <li><a href="#"><b>Tweets</b></a>&emsp;&emsp;<b style="color:#3399ff;
+      font-size:20px;">{{twtcount}}</b></li>
+      <li><a href="#"><b>Moments</b></a>&emsp;&emsp; <b style="color:#3399ff; font-size:20px;">0</b></li>
+    </ul>
+    <ul class="nav navbar-nav navbar-right">
+      <li><a href="#"><button type="button" class="btn btn-default" id="editbtn"><b>Edit profile</b></button></a></li>
+    </ul>
+  </div>
+</nav><br><br>
+<body style="background-color:#d1e0e0">
+  <div class="container-fluid">
+<div class="row">
+  
+    <div class="col-sm-3">
+      <a href="#" style="text-decoration: none;"><h2 style="color:black; margin-left: 20px;">
+        {% if user.profile.user %}
+          <p>{{user.profile.profilename}}</p>
+        {% else %}
+          <p>{{user.username}}</p>
+  
+        {% endif %}</h2></a>
+    
+<a href="#" style="text-decoration: none;"><p style="margin-left: 20px;"><b>{{user.email}}</b></p></a>
+
+<p>{{user.profile.bio}}</p>
+<p>{{user.profile.location}}</p>
+{% if user.profile.birth_date %}
+<p>{{user.profile.birth_date}}</p>
+  {% else %}
+  <p></p>
+  
+{% endif %}  
+      
+    </div>
+    <div class="col-sm-5">
+      
+      
+     {% for i,j,k in twtlist %}
+        <div class="container" id="twtid" style="background:#fff;border-radius:9px;box-shadow:12px 12px 15px -12px #000; padding:0px 0 0; margin-bottom:-56px; width: 600px;height:auto;margin-top: 65px;">
+
+        
+          <div class="post" style="height: auto;width: auto;">
+            {% for i in pic %}
+              <a href="#"><img src="/{{i.profile_image}}" class="img-circle" onerror="this.src='../static/img/default.jpg';"width="40px" height="40px" style="margin-top:10px; margin-left:10px"></a>
+            {% endfor %}
+            <a href="{% url 'profile' pk=i.user.pk %}" style="margin-top:30px;"><b style="color:#3399ff; font-size:17px; margin-left:10px;">{% if i.user.profile.profilename %}<i>{{user.profile.profilename}}</i>{% else %}<i>{{i.user.username}}</i>{% endif %}</b></a><br><br>
+            <!-- <p>{{i.email}}</p> -->
+            <p style="margin-left: 20px;">{{i.text|linebreaksbr}}</p>
+            
+            <div id="spa">
+              
+              <img id="twtimg" class="img-responsive" onError="this.onerror=null;this.src='';" src="/{{i.profile_image }}" / style="margin-left: 20px;">
+              
+            
+            </div> <br> 
+
+              <a href="{% url 'comments' pk=i.pk %}">{{ i.comments.count }}</a>
+            <p type="button" class="fa fa-comments fa-lg" style="color: #3399ff;margin-left:20px;" title="comments"></p><a href="#" data-toggle="tooltip" title="retweet"><i class="fas fa-retweet" style="color: #3399ff;margin-left:50px; font-size: 20px;"></i></a><a href="#" data-toggle="tooltip" title="likes"><i class="fas fa-heart" style="margin-left: 80px;color: #3399ff;font-size: 20px;"></i></a><i class="far fa-envelope" style="margin-left:90px; color:#3399ff;font-size:20px;"></i>
+            <i style="margin-left: 80px;color: #3399ff;font-size: 15px;"></i><button class="btn btn-info" onclick="ch('{{i.pk}}')">comments</button>
+          
+            <p style="margin-left: 20px;">posted on:{{i.created_at}}</p><br>
+<div id="comments_hide{{i.pk}}" style="display: none;">         
+{% for i in j %}
+        <!-- <div class="container" id="twtid" style="background:#fff;border-radius:9px;box-shadow:12px 12px 15px -12px #000; padding:0px 0 0; margin-bottom:-56px; width: 500px;height:auto;margin-top: 65px;"> -->
+        
+          <div class="post" style="height: auto;width: auto;">
+            
+            <i style="margin-top:30px;"><b style="color:#3399ff; font-size:17px; margin-left:20px;">{{i.user}}</b></i><br><br>
+            <!-- <p>{{i.email}}</p> -->
+            <p style="margin-left: 20px;">{{i.text|linebreaksbr}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
+            <a href="{% url 'replycomments' pk=i.pk %}">{{ i.replycomments.count }}</a>
+            <p type="button" class="fa fa-comments fa-lg" data-toggle="modal" data-form="{% url 'replysavecomment1' pk=i.pk }" data-pk1="{{i.pk}}" data-target="#myModal1" data-user1="{{i.user}}" data-text1="{{i.text|linebreaksbr}}" id="modalbutton1" style="color: #3399ff;margin-left:20px;" title="comments"></p>
+      <i style="margin-left: 80px;color: #3399ff;font-size: 15px;"><a href="{% url 'replycomments' pk=i.pk %}">{{ count }}Comments: </a></i>      
+
+            
+            <div id="spa">
+              
+              <img id="twtimg" class="img-responsive" onError="this.onerror=null;this.src='';" src="/{{i.image }}" />
+              
+            
+            </div>  
+        
+            
+            <p style="margin-left: 20px;">posted on:{{i.created_at}}</p><br><br>
+            
+            
+            
+          </div>
+        
+
+{% empty %}
+<div class="container" id="twtid" style="background:#fff;border-radius:9px;box-shadow:12px 12px 15px -12px #000; padding:0px 0 0; margin-bottom:-56px; width:auto;height:auto;margin-top: 65px;">
+        
+  <div class="post" style="height:10px;width: 500px;">
+            
+   
+
+</div>
+  
+</div>
+      {% endfor %}</div>
+
+
+          </div>
+        </div>
+
+
+
+      {% endfor %}
+
+
+    
+    </div>
+
+  </div>
+</div>  
+
+        
+<div class="modal fade" id="myModal" role="dialog" style="height:100%; margin-left: 300px; width:60%;">
+    <div class="modal-dialog" style="height:500px;width: 100%; margin-top: 100px;">
+    
+      <!-- Modal content-->
+      
+      <div class="modal-content">
+         
+        <div class="modal-header"><button type="button" class="close" data-dismiss="modal">&times;<span style="color: red;"></span></button>
+          {% for i in pic %} 
+          <img class="img-responsive"  src="/{{i.header_image}}" onerror="this.src='../../static/img/header.jpg';" style="width: 100%; height:250px;">
+          {% endfor %}
+         
+          <!--  {% for i in pic %}  -->
+          <!-- <a href="#"><h4><img class="img-responsive"  src="/{{i.header_image}}" /><span class="glyphicon glyphicon-camera" style="margin-top:250px;" id="headimg"></span>&nbsp; Add header photo</h4></a>
+          <input type="file" id="profile" name=""> -->
+          <!-- {% endfor %} -->
+        </div>
+
+        
+        <div class="modal-body" style="padding:40px 50px;">
+        <button type="submit" class="btn btn-default pull-right" data-dismiss="modal" style="border-radius: 15px; margin-left: 1100px;">Cancel</button>
+          
+          <form role="form" method="post" enctype="multipart/form-data">
+            
+              {% csrf_token %}
+              <h2><b>{{user.username}}</b></h2> 
+              {{ form.as_p }}
+              <button type="submit" class="btn btn-default pull-right" style="border-radius:20px;border-color: #0080ff; color: #0080ff; margin-bottom:50px;"><b>Save changes</b></button>
+            </form>
+
+              
+        </div>
+      
+      </div>
+      
+    </div>
+  </div> 
+  <script type="text/javascript">
+          $(modalbutton1).click(function() {
+            var pk = $(this).data("pk1");
+            var text = $(this).data("text1");
+            var user=$(this).data("user1");
+            var url = "{% url 'replysavecomment1' pk=0 %}";
+
+            url = url.replace(0,pk);
+
+              $("#form2").attr("action", url);
+              $("#newuser").html(user);
+              $("#user2").html("<b>"+user+":</b>");
+              $("#text2").html(text+"<hr>");
+              console.log(pk);
+              console.log(text);
+              console.log(user);
+              
+          });
+          </script>
+
+<div id="myModal1" class="modal fade " role="dialog" style="height: 700px; width: 100%;">
+  <div class="modal-dialog">
+
+      <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title" id="newuser">Reply To </h4>
+          </div>
+          <div class="modal-body">
+            <p id="user2"></p>
+            <p id="text2"></p>
+            <form role="form" method="post" class="tweet-form" enctype="multipart/form-data" id="form2"> 
+              {% csrf_token %}
+                {{ form2.as_p }}
+                <i class="fa fa-camera" onclick="chooseFile()" style="margin-left:30px;margin-top: 35px;" id="camera"  data-toggle="tooltip" data-placement="top" title="Add photos"" ></i>
+                <input type="file" id="choose" >
+         
+          <button class="btn btn-default btn-md" type="submit" style="width:70px;margin-bottom:20px;background-color:#3a85ff;color:white; margin-left:350px; ">Reply</button>
+            </form>
+          </div>
+      </div>
+    </div>
+</div>  
+</body>
+<style type="text/css">
+  #twtimg{
+    /*border: 1px solid #ddd;
+      border-radius: 0px;*/
+      padding: 1px;
+      width: 90%;
+  }
+  #id_text{
+    margin-left:10px;
+    margin-top:20px;
+    width: 90%; 
+    height:50px;
+    border-radius: 10px;
+
+  }
+  .errorlist{
+    display: none;
+  }
+  #id_bio{
+  height:30px;
+  border-color:#0080ff;
+  border-radius: 10px;
+  padding-top:5px;
+  padding-left:7px;
+
+
+}
+#id_profilename{
+  height:30px;
+  border-color:#0080ff;
+  border-radius: 10px;
+  padding-top:5px;
+  padding-left:7px;
+
+
+}
+
+#id_birth_date{
+  height:30px;
+  border-color:#0080ff;
+  border-radius: 10px;
+  padding-top:5px;
+  padding-left:7px;
+}
+#id_location{
+  height:30px;
+  border-color:#0080ff;
+  border-radius: 10px;
+  padding-top:5px;
+  padding-left:7px;
+}
+/*#id_profile_image{
+  margin-left: 100px;
+}
+#id_header_image{
+  margin-left:100px;
+}*/
+  
+</style>
+ 
+<script type="text/javascript">
+
+$( function() {
+        $("#search").on('keyup', function(){
+        var value = $(this).val();
+        $.ajax({
+            url: "{% url 'ajax_autocomplete' %}",
+            data: {
+              'search': value 
+            },
+            dataType: 'json',
+            success: function (data) {
+                list = data.list;
+                console.log(list);
+                $("#search").autocomplete({
+                source : list
+                
+                });       
+            }
+        });        
+    });
+ });
+</script>
+<script>  
+  $(document).ready(function(){
+    $("#id_image").hide();
+    });
+
+   function chooseFile() {
+      document.getElementById("id_image").click();
+   }
+</script>
+
+
+
+{% endblock %}
+<script>
+  function ch(value){
+    $("#comments_hide"+value).toggle();
+    }
+</script>

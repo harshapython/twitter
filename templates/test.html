@@ -1,0 +1,16 @@
+   
+{% block content %}
+    <div class="dropdown">
+    <p class="dropdown-toggle fa fa-user-circle-o" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true"></p>
+    <ul class="dropdown-menu">
+    	<li><a href="{% url 'updateprofile' %}">updateprofile</a></li>
+      {% if user.is_authenticated %}
+        <li><a href="{% url 'logout' %}">Logout</a></li>
+      {% else %}
+        <li><a href="{% url 'login' %}">login</a></li>
+      {% endif %}
+      
+    </ul>
+  </div>
+  {% endblock %}
+  
